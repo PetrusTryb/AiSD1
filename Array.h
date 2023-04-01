@@ -1,15 +1,15 @@
 #pragma once
-#define BLOCK_LENGHT 64
 template <class T>
 class Array {
 private:
+    const int ARRAY_BLOCK_SIZE = 32;
     T* data;
     int currentLenght;
     int maxLenght;
 public:
     Array() {
-        data = new T[BLOCK_LENGHT]{};
-        maxLenght = BLOCK_LENGHT;
+        data = new T[ARRAY_BLOCK_SIZE]{};
+        maxLenght = ARRAY_BLOCK_SIZE;
         currentLenght = 0;
     }
     Array(const Array& arr) {
@@ -37,21 +37,21 @@ public:
         delete[] data;
     }
 
-    void operator+=(const T& c) {
+    void Add(const T& c) {
         if (currentLenght == maxLenght) {
-            T* temp = new T[maxLenght + BLOCK_LENGHT]{};
+            T* temp = new T[maxLenght + ARRAY_BLOCK_SIZE]{};
             for (int i = 0; i < currentLenght; i++) {
                 temp[i] = data[i];
             }
             delete[] data;
             data = temp;
-            maxLenght += BLOCK_LENGHT;
+            maxLenght += ARRAY_BLOCK_SIZE;
         }
         data[currentLenght] = c;
         currentLenght++;
     }
 
-    bool hasElement(Array<char>& el) const {
+    bool HasElement(Array<char>& el) const {
         for (int i = 0; i < currentLenght; i++)
             if (data[i] == el)
                 return true;
@@ -62,9 +62,8 @@ public:
         return data[index];
     }
 
-    bool operator==(Array& str)
-        const {
-        if (currentLenght != str.length())
+    bool operator==(Array& str) const {
+        if (currentLenght != str.Length())
             return false;
         for (int i = 0; i < currentLenght; i++)
             if (str[i] != data[i]) {
@@ -73,7 +72,7 @@ public:
         return true;
     }
 
-    int toInt(bool detectErrors = false) const {
+    int ToInt(bool detectErrors = false) const {
         int x = 0;
         for (int i = 0; i < currentLenght; i++) {
             int temp = data[i] - '0';
@@ -85,7 +84,7 @@ public:
         return x;
     }
 
-    char* toValidString() {
+    char* ToValidString() {
         char* str = new char[currentLenght + 2] {};
         int start = 0;
         if (data[0] == ' ')
@@ -98,25 +97,21 @@ public:
         return str;
     }
 
-    void removeTrailingSpaces() {
-        while (data[currentLenght - 1] <= ' ') {
+    void RemoveTrailingSpaces() {
+        while (data[currentLenght - 1] <= ' '&&currentLenght>0) {
             data[currentLenght - 1] = '\0';
             currentLenght--;
-            if (currentLenght == -1) {
-                currentLenght = 0;
-                return;
-            }
         }
     }
 
-    int length() const {
+    int Length() const {
         return currentLenght;
     }
 
-    void clear() {
+    void Clear() {
         delete[] data;
-        data = new T[BLOCK_LENGHT]{};
-        maxLenght = BLOCK_LENGHT;
+        data = new T[ARRAY_BLOCK_SIZE]{};
+        maxLenght = ARRAY_BLOCK_SIZE;
         currentLenght = 0;
     }
 

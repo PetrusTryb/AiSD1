@@ -2,7 +2,6 @@
 #include "List.h"
 #include "AttributesList.h"
 #include "Array.h"
-#define BLOCKSSTORAGE_BLOCK_SIZE 8
 class BlocksStorage : public List
 {
 protected:
@@ -12,7 +11,7 @@ protected:
 	};
 	struct Node
 	{
-		Block* Value[BLOCKSSTORAGE_BLOCK_SIZE] = {};
+		Block* Value[LIST_BLOCK_SIZE] = {};
 		Node* Next = nullptr;
 		Node* Prev = nullptr;
 		int elements = 0;
@@ -20,12 +19,10 @@ protected:
 	Node* head = nullptr;
 	Node* tail = nullptr;
 public:
-	BlocksStorage();
 	void Add(Array<String>& selectors, AttributesList& attributes);
 	Block* Get(String& selector);
 	Block* operator[](int index);
-	int Count(String& selector);
-	int Count();
+	int CountSelector(String& selector);
 	int CountAttribute(String& name);
 	bool Remove(int index);
 };

@@ -1,10 +1,5 @@
 #include "BlocksStorage.h"
 
-BlocksStorage::BlocksStorage()
-{
-	Clear();
-}
-
 void BlocksStorage::Add(Array<String>& selectors, AttributesList& attributes)
 {
 	if (nodes == 0) {
@@ -13,7 +8,7 @@ void BlocksStorage::Add(Array<String>& selectors, AttributesList& attributes)
 		head = node;
 		nodes++;
 	}
-	if (tail->elements == BLOCKSSTORAGE_BLOCK_SIZE) {
+	if (tail->elements == LIST_BLOCK_SIZE) {
 		Node* node = new Node;
 		tail->Next = node;
 		node->Prev = tail;
@@ -62,7 +57,7 @@ BlocksStorage::Block* BlocksStorage::operator[](int index)
 	return nullptr;
 }
 
-int BlocksStorage::Count(String& selector)
+int BlocksStorage::CountSelector(String& selector)
 {
 	int count = 0;
 	Node* n = head;
@@ -77,11 +72,6 @@ int BlocksStorage::Count(String& selector)
 		n = n->Next;
 	}
 	return count;
-}
-
-int BlocksStorage::Count()
-{
-	return overallElements;
 }
 
 int BlocksStorage::CountAttribute(String& name)

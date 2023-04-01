@@ -10,15 +10,14 @@ protected:
 	};
 	struct Node
 	{
-		Pair* Value[8] = {};
+		Pair* Value[LIST_BLOCK_SIZE] = {};
 		Node* Next = nullptr;
 		Node* Prev = nullptr;
 		int elements = 0;
 	};
-	Node* head;
-	Node* tail;
+	Node* head=nullptr;
+	Node* tail=nullptr;
 public:
-	AttributesList();
 	AttributesList(const AttributesList& list);
 	AttributesList operator=(const AttributesList& list);
 	void Add(String& attribute, String& value);

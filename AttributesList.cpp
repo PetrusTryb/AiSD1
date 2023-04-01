@@ -1,13 +1,5 @@
 #include "AttributesList.h"
 
-AttributesList::AttributesList()
-{
-	head = nullptr;
-	tail = nullptr;
-	nodes = 0;
-	overallElements = 0;
-}
-
 AttributesList::AttributesList(const AttributesList& list) {
 	head = nullptr;
 	tail = nullptr;
@@ -23,7 +15,6 @@ AttributesList::AttributesList(const AttributesList& list) {
 }
 
 AttributesList AttributesList::operator=(const AttributesList& list) {
-	Clear();
 	Node* n = list.head;
 	while (n != nullptr) {
 		for (int i = 0; i < n->elements; i++) {
@@ -57,7 +48,7 @@ void AttributesList::Add(String& attribute, String& value) {
 		}
 		n = n->Next;
 	}
-	if (tail->elements == PACK) {
+	if (tail->elements == LIST_BLOCK_SIZE) {
 		Node* n = new Node;
 		n->Value[0] = new Pair{ attribute, value };
 		n->Prev = tail;

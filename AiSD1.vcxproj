@@ -128,14 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AiSD1.cpp" />
-    <ClCompile Include="AttributesList.cpp" />
-    <ClCompile Include="BlocksStorage.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="Array.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AttributesList.h" />
-    <ClInclude Include="BlocksStorage.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Array.h" />
   </ItemGroup>
