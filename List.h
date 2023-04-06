@@ -44,24 +44,19 @@ public:
 		Node* n = list.head;
 		while (n != nullptr) {
 			for (int i = 0; i < n->elements; i++) {
-				Add(*(n->Value[i]));
+				Add((n->Value[i]));
 			}
 			n = n->Next;
 		}
 		return *this;
 	}
 	~List() {
-		Node* n = head;
-		while (n != nullptr) {
-			Node* temp = n;
-			n = n->Next;
-			delete temp;
-		}
+		Clear();
 	}
-	void Add(T& value) {
+	void Add(T value) {
 		if (nodes == 0) {
 			Node* n = new Node;
-			n->Value[0] = &value;
+			n->Value[0] = new T(value);
 			n->elements++;
 			head = n;
 			tail = n;
@@ -69,7 +64,7 @@ public:
 		}
 		else if (tail->elements == LIST_BLOCK_SIZE) {
 			Node* n = new Node;
-			n->Value[0] = &value;
+			n->Value[0] = new T(value);
 			n->elements++;
 			tail->Next = n;
 			n->Prev = tail;
@@ -77,7 +72,7 @@ public:
 			nodes++;
 		}
 		else {
-			tail->Value[tail->elements] = &value;
+			tail->Value[tail->elements] = new T(value);
 			tail->elements++;
 		}
 		overallElements++;
@@ -85,7 +80,7 @@ public:
 	T* Get(String& key, bool comparator(T&, String&)) const {
 		Node* n = tail;
 		while (n != nullptr) {
-			for (int i = n->elements-1; i >=0; i--) {
+			for (int i = n->elements - 1; i >= 0; i--) {
 				if (comparator(*(n->Value[i]), key)) {
 					return n->Value[i];
 				}
@@ -94,7 +89,7 @@ public:
 		}
 		return nullptr;
 	}
-	T* operator[](int index) const {
+	T* operator[](const int& index) const {
 		if (index > overallElements) {
 			return nullptr;
 		}
@@ -102,6 +97,10 @@ public:
 		Node* n = head;
 		while (n != nullptr) {
 			for (int j = 0; j < n->elements; j++) {
+				if (i + n->elements < index) {
+					i += n->elements;
+					break;
+				}
 				if (i == index) {
 					return n->Value[j];
 				}
@@ -111,7 +110,7 @@ public:
 		}
 		return nullptr;
 	}
-	int Count() const{
+	int Count() const {
 		return overallElements;
 	}
 	int Count(String& key, bool comparator(T&, String&)) const {
@@ -119,15 +118,25 @@ public:
 		Node* n = tail;
 		while (n != nullptr) {
 			for (int i = 0; i < n->elements; i++) {
-				if (comparator(*(n->Value[i]), key)) {
+				if (comparator(*(n->Value[i]), key))
 					count++;
-				}
 			}
 			n = n->Prev;
 		}
 		return count;
 	}
-	int Remove(int index) {
+	bool HasElement(String& key, bool comparator(T&, String&)) const {
+		Node* n = tail;
+		while (n != nullptr) {
+			for (int i = 0; i < n->elements; i++) {
+				if (comparator(*(n->Value[i]), key))
+					return true;
+			}
+			n = n->Prev;
+		}
+		return false;
+	}
+	int Remove(const int& index) {
 		if (index > overallElements) {
 			return -1;
 		}
@@ -135,7 +144,12 @@ public:
 		Node* n = head;
 		while (n != nullptr) {
 			for (int j = 0; j < n->elements; j++) {
+				if (i + n->elements < index) {
+					i += n->elements;
+					break;
+				}
 				if (i == index) {
+					delete n->Value[j];
 					for (int k = j; k < n->elements - 1; k++) {
 						n->Value[k] = n->Value[k + 1];
 					}
@@ -165,7 +179,8 @@ public:
 		Node* n = tail;
 		while (n != nullptr) {
 			for (int i = 0; i < n->elements; i++) {
-				if (comparator(*(n->Value[i]),key)) {
+				if (comparator(*(n->Value[i]), key)) {
+					delete n->Value[i];
 					for (int j = i; j < n->elements - 1; j++) {
 						n->Value[j] = n->Value[j + 1];
 					}
@@ -195,6 +210,8 @@ public:
 		while (n != nullptr) {
 			Node* temp = n;
 			n = n->Next;
+			for (int i = 0; i < temp->elements; i++)
+				delete temp->Value[i];
 			delete temp;
 		}
 		nodes = 0;
@@ -203,4 +220,3 @@ public:
 		tail = nullptr;
 	}
 };
-
